@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracking Pengiriman - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tracking.css">
+</head>
+
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <a class="brand" href="dashboard.html">Dashboard</a>
+    </div>
+    <ul class="nav-list">
+      <li><a href="stok.html" class="nav-link">Informasi Bahan Ajar</a></li>
+      <li><a href="tracking.html" class="nav-link active">Tracking Pengiriman</a></li>
+      <li class="nav-section">
+        <span class="nav-section-title">Laporan</span>
+        <ul class="sub-list">
+          <li><a href="#" class="nav-link">Monitoring Progress DO Bahan Ajar</a></li>
+          <li><a href="#" class="nav-link">Rekap Bahan Ajar</a></li>
+        </ul>
+      </li>
+      <li><a href="#" class="nav-link">Histori Transaksi Bahan Ajar</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content tracking-page">
+    <header class="page-header">
+      <div>
+        <h1>Tracking Pengiriman</h1>
+        <p class="page-subtitle">Cari status pengiriman bahan ajar berdasarkan nomor delivery order.</p>
+      </div>
+    </header>
+
+    <form id="trackingForm" class="search-card">
+      <label for="nomorDO">Nomor Delivery Order</label>
+      <div class="search-row">
+        <input type="text" id="nomorDO" placeholder="Masukkan nomor DO" required>
+        <button type="submit" class="btn primary">Cari</button>
+      </div>
+      <p class="helper">Contoh: 2023001234</p>
+      <p class="error" id="errorMessage"></p>
+    </form>
+
+    <section id="resultSection" class="result-section hidden">
+      <div class="result-header">
+        <div>
+          <div class="result-title">Nama Mahasiswa</div>
+          <div class="result-name" id="namaMahasiswa">-</div>
+        </div>
+        <span class="status-pill" id="statusText">-</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Status Pengiriman</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span>Ekspedisi</span>
+          <strong id="ekspedisi">-</strong>
+        </div>
+        <div class="detail-item">
+          <span>Tanggal Kirim</span>
+          <strong id="tanggalKirim">-</strong>
+        </div>
+        <div class="detail-item">
+          <span>Jenis Paket</span>
+          <strong id="jenisPaket">-</strong>
+        </div>
+        <div class="detail-item">
+          <span>Total Pembayaran</span>
+          <strong id="totalPembayaran">-</strong>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <h3>Riwayat Pengiriman</h3>
+        <ul id="timelineList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script>
+    const form = document.getElementById('trackingForm');
+    const input = document.getElementById('nomorDO');
+    const resultSection = document.getElementById('resultSection');
+    const errorMessage = document.getElementById('errorMessage');
+    const namaMahasiswa = document.getElementById('namaMahasiswa');
+    const statusText = document.getElementById('statusText');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercent = document.getElementById('progressPercent');
+    const ekspedisi = document.getElementById('ekspedisi');
+    const tanggalKirim = document.getElementById('tanggalKirim');
+    const jenisPaket = document.getElementById('jenisPaket');
+    const totalPembayaran = document.getElementById('totalPembayaran');
+    const timelineList = document.getElementById('timelineList');
+
+    function getProgress(status) {
+      const key = status.toLowerCase();
+      if (key.includes('selesai') || key.includes('diterima')) return 100;
+      if (key.includes('dikirim')) return 70;
+      if (key.includes('perjalanan')) return 55;
+      if (key.includes('proses')) return 40;
+      return 30;
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+
+    function renderTracking(data) {
+      namaMahasiswa.textContent = data.nama;
+      statusText.textContent = data.status;
+      statusText.setAttribute('data-status', data.status.toLowerCase());
+      const percent = getProgress(data.status);
+      progressBar.style.width = percent + '%';
+      progressPercent.textContent = percent + '%';
+      ekspedisi.textContent = data.ekspedisi;
+      tanggalKirim.textContent = formatDate(data.tanggalKirim);
+      jenisPaket.textContent = data.paket;
+      totalPembayaran.textContent = data.total;
+
+      timelineList.innerHTML = '';
+      data.perjalanan.forEach((item) => {
+        const li = document.createElement('li');
+        const time = document.createElement('span');
+        const text = document.createElement('p');
+        time.textContent = item.waktu;
+        text.textContent = item.keterangan;
+        li.appendChild(time);
+        li.appendChild(text);
+        timelineList.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nomor = input.value.trim();
+      const data = dataTracking[nomor];
+      if (!nomor || !data) {
+        errorMessage.textContent = 'Nomor DO tidak ditemukan. Cek kembali input Anda.';
+        resultSection.classList.add('hidden');
+        return;
+      }
+      errorMessage.textContent = '';
+      resultSection.classList.remove('hidden');
+      renderTracking(data);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stok Bahan Ajar - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/stok.css">
+</head>
+
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <a class="brand" href="dashboard.html">Dashboard</a>
+    </div>
+    <ul class="nav-list">
+      <li><a href="stok.html" class="nav-link active">Informasi Bahan Ajar</a></li>
+      <li><a href="tracking.html" class="nav-link">Tracking Pengiriman</a></li>
+      <li class="nav-section">
+        <span class="nav-section-title">Laporan</span>
+        <ul class="sub-list">
+          <li><a href="#" class="nav-link">Monitoring Progress DO Bahan Ajar</a></li>
+          <li><a href="#" class="nav-link">Rekap Bahan Ajar</a></li>
+        </ul>
+      </li>
+      <li><a href="#" class="nav-link">Histori Transaksi Bahan Ajar</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content stok-page">
+    <header class="page-header">
+      <div>
+        <h1>Stok Bahan Ajar</h1>
+        <p class="page-subtitle">Pantau ketersediaan bahan ajar dan tambahkan stok baru.</p>
+      </div>
+      <div class="total-card">
+        <span>Total Item</span>
+        <strong id="totalItem">0</strong>
+      </div>
+    </header>
+
+    <section class="table-card">
+      <div class="table-header">
+        <h3>Daftar Stok</h3>
+        <span class="table-note">Data diambil dari data dummy.</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cover</th>
+              <th>Kode Lokasi</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Jenis</th>
+              <th>Edisi</th>
+              <th>Stok</th>
+            </tr>
+          </thead>
+          <tbody id="stokTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script>
+    const stokTable = document.getElementById('stokTable');
+    const totalItem = document.getElementById('totalItem');
+    function renderTable() {
+      stokTable.innerHTML = '';
+      dataBahanAjar.forEach((item) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+					<td>
+						<div class="cover">
+							<img src="${item.cover || 'assets/img/placeholder.jpg'}" alt="${item.namaBarang}">
+						</div>
+					</td>
+					<td>${item.kodeLokasi}</td>
+					<td>${item.kodeBarang}</td>
+					<td>${item.namaBarang}</td>
+					<td>${item.jenisBarang}</td>
+					<td>${item.edisi}</td>
+					<td>${item.stok}</td>
+				`;
+        stokTable.appendChild(row);
+      });
+      totalItem.textContent = dataBahanAjar.length;
+    }
+
+    renderTable();
+  </script>
+</body>
+
+</html>

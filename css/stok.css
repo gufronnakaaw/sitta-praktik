@@ -1,0 +1,128 @@
+* {
+  box-sizing: border-box;
+}
+
+.stok-page {
+  gap: 20px;
+}
+
+.page-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 2rem;
+  letter-spacing: -0.8px;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: #5a6072;
+  font-size: 1rem;
+}
+
+.total-card {
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 14px;
+  box-shadow: 0 10px 20px rgba(15, 20, 40, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  text-align: right;
+}
+
+.total-card span {
+  font-size: 0.85rem;
+  color: #7a8097;
+}
+
+.total-card strong {
+  font-size: 1.6rem;
+  color: #1f2432;
+}
+
+.table-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 14px 28px rgba(15, 20, 40, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.table-note {
+  color: #7a8097;
+  font-size: 0.9rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #7a8097;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eef0f6;
+}
+
+tbody td {
+  padding: 12px 0;
+  border-bottom: 1px solid #f2f3f7;
+  color: #2a2f3a;
+  font-size: 0.95rem;
+}
+
+.cover {
+  width: 46px;
+  height: 62px;
+  border-radius: 10px;
+  background: #f3f5fb;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 700px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Sitta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+  <main class="page">
+    <div class="login-container modern-shadow">
+      <div class="login-header">
+        <h2>Masuk</h2>
+        <p class="login-subtitle">Kelola bahan ajar dengan cepat dan teratur.</p>
+      </div>
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Masukkan email" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Masukkan password" required>
+        </div>
+        <button type="submit" class="btn-login">Login</button>
+      </form>
+      <div class="links">
+        <a href="#" id="lupaPassword">Lupa Password?</a>
+        <span class="dot-separator"></span>
+        <a href="#" id="daftar">Daftar</a>
+      </div>
+    </div>
+  </main>
+
+
+  <div id="alertModal" class="modal">
+    <div class="modal-content">
+      <h3 style="color:#e74c3c;font-weight:600;">Login Gagal</h3>
+      <p id="alertMessage">Email/password yang anda masukkan salah</p>
+      <button class="btn-close" onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+
+  <div id="lupaModal" class="modal">
+    <div class="modal-content">
+      <h3 style="color:#667eea;font-weight:600;">Lupa Password</h3>
+      <p>Masukkan email Anda untuk menerima link reset password.</p>
+      <input type="email" id="resetEmail" placeholder="Email Anda" class="input-modal">
+      <button class="btn-close" onclick="kirimReset()">Kirim Link Reset</button>
+      <button class="btn-close" style="background:#95a5a6;margin-left:10px;" onclick="closeLupaModal()">Batal</button>
+    </div>
+  </div>
+
+
+  <div id="daftarModal" class="modal">
+    <div class="modal-content">
+      <h3 style="color:#667eea;font-weight:600;">Daftar Akun Baru</h3>
+      <p>Silakan daftar melalui halaman pendaftaran.</p>
+      <button class="btn-close" onclick="closeDaftarModal()">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const alertModal = document.getElementById('alertModal');
+    const lupaModal = document.getElementById('lupaModal');
+    const daftarModal = document.getElementById('daftarModal');
+
+
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+
+      if (email === "user@example.com" && password === "password123") {
+        alert("✅ Login berhasil! Selamat datang.");
+
+        window.location.href = "dashboard.html";
+      } else {
+
+        document.getElementById('alertMessage').textContent = "Email/password yang anda masukkan salah";
+        alertModal.style.display = "flex";
+      }
+    });
+
+
+    document.getElementById('lupaPassword').addEventListener('click', function (e) {
+      e.preventDefault();
+      lupaModal.style.display = "flex";
+    });
+
+
+    document.getElementById('daftar').addEventListener('click', function (e) {
+      e.preventDefault();
+      daftarModal.style.display = "flex";
+    });
+
+    function closeModal() {
+      alertModal.style.display = "none";
+    }
+
+    function closeLupaModal() {
+      lupaModal.style.display = "none";
+    }
+
+    function closeDaftarModal() {
+      daftarModal.style.display = "none";
+    }
+
+    function kirimReset() {
+      const resetEmail = document.getElementById('resetEmail').value;
+      if (resetEmail) {
+        alert("✅ Link reset password telah dikirim ke " + resetEmail);
+        closeLupaModal();
+      } else {
+        alert("Mohon masukkan email Anda");
+      }
+    }
+
+
+    window.onclick = function (event) {
+      if (event.target === alertModal) closeModal();
+      if (event.target === lupaModal) closeLupaModal();
+      if (event.target === daftarModal) closeDaftarModal();
+    }
+  </script>
+</body>
+
+</html>

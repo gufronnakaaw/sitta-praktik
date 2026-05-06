@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Bahan Ajar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <a class="brand" href="dashboard.html">Dashboard</a>
+    </div>
+    <ul class="nav-list">
+      <li><a href="stok.html" class="nav-link">Informasi Bahan Ajar</a></li>
+      <li><a href="tracking.html" class="nav-link">Tracking Pengiriman</a></li>
+      <li class="nav-section">
+        <span>LAPORAN</span>
+        <ul class="sub-list">
+          <li><a href="#" class="nav-link">Monitoring Progress DO Bahan Ajar</a></li>
+          <li><a href="#" class="nav-link">Rekap Bahan Ajar</a></li>
+        </ul>
+      </li>
+      <li><a href="#" class="nav-link">Histori Transaksi Bahan Ajar</a></li>
+    </ul>
+  </nav>
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <div class="greeting" id="greeting"></div>
+        <p class="subtitle">Sistem pengelolaan bahan ajar yang rapi, cepat, dan terpantau.</p>
+      </div>
+      <div class="profile-chip">
+        <div class="avatar"></div>
+        <div>
+          <div class="name">Admin Sitta</div>
+          <div class="role">Operator</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-card">
+      <div>
+        <h1>Selamat Datang di Dashboard</h1>
+        <p>Pilih menu di samping untuk mulai mengelola informasi, pengiriman, dan laporan bahan ajar.</p>
+        <div class="cta-row">
+          <a href="#" class="btn primary">Lihat Informasi</a>
+          <a href="tracking.html" class="btn ghost">Cek Tracking</a>
+        </div>
+      </div>
+      <div class="hero-graphic">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function getGreeting() {
+      const now = new Date();
+      const hour = now.getHours();
+      if (hour < 11) return "Selamat pagi";
+      if (hour < 15) return "Selamat siang";
+      if (hour < 18) return "Selamat sore";
+      return "Selamat malam";
+    }
+    document.getElementById('greeting').textContent = getGreeting();
+  </script>
+</body>
+
+</html>
