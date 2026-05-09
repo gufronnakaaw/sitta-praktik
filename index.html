@@ -68,6 +68,7 @@
     </div>
   </div>
 
+  <script src="js/data.js"></script>
   <script>
     const loginForm = document.getElementById('loginForm');
     const alertModal = document.getElementById('alertModal');
@@ -81,8 +82,9 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
+      const check = dataPengguna.find(user => user.email === email && user.password === password)
 
-      if (email === "user@example.com" && password === "password123") {
+      if (check) {
         alert("✅ Login berhasil! Selamat datang.");
 
         window.location.href = "dashboard.html";
