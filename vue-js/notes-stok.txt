@@ -1,0 +1,40 @@
+Halaman Stok Bahan Ajar
+• Halaman ini menampilkan daftar stok bahan ajar untuk seluruh UT daerah (silakan
+bebas menggunakan table/list/bentuk lain yang menampilkan list data dalam jumlah
+banyak dan memiliki data-data field). Teman-teman mahasiswa perlu menampilkan
+daftar stok bahan ajar yang terdiri dari kolom data field sebagai berikut
+o Kode Mata Kuliah/Nama Mata Kuliah → kode, judul
+o Kategori Mata Kuliah → Kategori
+o UT-Daerah → upbjj
+o Lokasi Rak → lokasiRak
+o Jumlah Stok Bahan Ajar → qty
+o Jumlah Stok Safety Bahan Ajar → safety
+o Status
+o Catatan → catatanHTML
+• Terdapat Fitur untuk mengedit stok data bahan ajar
+• Terdapat fitur untuk melakukan filter dan sort data stock (silakan bebas menggunakan
+elemen select/radio/checkbox)
+o Terdapat filter stok berdasarkan:
+▪ ‘UT-Daerah’: terdiri pilihan dari seluruh UT-daerah, dan daftar setiap
+UT-daerah (upbjjList)
+▪ ‘Kategori Mata Kuliah’ (upbjjList)
+o Terdapat filter yang hanya menampilkan jumlah stock (qty) < dari jumlah
+safety stock (safety) dan jumlah stock = 0 untuk menjadi daftar yang dapat
+mengingatkan untuk melakukan re-order bahan ajar.
+o Terdapat fitur sort yang mengurutkan berdasarkan judul, stock, dan harga
+o Fitur filter dapat di-set ulang (reset)
+o Terapkan fitur di vue.js di mana di semua filter tidak perlu recompute kembali.
+o Implementasikan dependent options seperti misalkan ketika memilih filter
+stok berdasarkan ‘UT-daerah’, baru akan memunculkan filter untuk ‘Kategori
+Mata Kuliah’
+• Menampilkan status dari stok bahan ajar
+o Memberikan status ‘Aman dengan menggunakan simbol yang memberikan
+tanda yang memberikan kesan ‘aman’ ataupun teks berwarna hijau apabila
+stok >= safety stock
+o Memberikan status ‘Menipis’ dengan menggunakan simbol yang memberikan
+kesan adanya ‘warning’ ataupun teks berwarna orange apabila stok < safety
+stock.
+o Memberikan status ‘Kosong’ dengan menggunakan simbol yang memberikan
+kesan adanya ‘bahaya’ ataupun teks berwarna merah apabila stok = 0
+• Terdapat Fitur untuk menambahkan data bahan ajar baru melalui formulir kecil dan
+melakukan validasi sederhana untuk setiap data field.

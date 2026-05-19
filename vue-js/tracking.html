@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracking Pengiriman - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/tracking.css">
+</head>
+
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <a class="brand" href="dashboard.html">Dashboard</a>
+    </div>
+    <ul class="nav-list">
+      <li><a href="stok.html" class="nav-link">Informasi Bahan Ajar</a></li>
+      <li><a href="tracking.html" class="nav-link active">Tracking Pengiriman</a></li>
+      <li class="nav-section">
+        <span class="nav-section-title">Laporan</span>
+        <ul class="sub-list">
+          <li><a href="#" class="nav-link">Monitoring Progress DO Bahan Ajar</a></li>
+          <li><a href="#" class="nav-link">Rekap Bahan Ajar</a></li>
+        </ul>
+      </li>
+      <li><a href="#" class="nav-link">Histori Transaksi Bahan Ajar</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content tracking-page" id="app" v-cloak>
+    <header class="page-header">
+      <div>
+        <h1>Tracking Pengiriman</h1>
+        <p class="page-subtitle">Cari status pengiriman bahan ajar berdasarkan nomor delivery order.</p>
+      </div>
+    </header>
+
+    <section class="form-card">
+      <div class="form-header">
+        <div>
+          <h3>Tambah Delivery Order</h3>
+          <p>Masukkan data pengiriman baru, nomor DO tergenerate otomatis.</p>
+        </div>
+        <span class="form-note">Format: DO{{ currentYear }}-{{ String(nextSequence).padStart(3, "0") }}</span>
+      </div>
+      <form class="form-grid" @submit.prevent="addTracking">
+        <div class="field">
+          <label for="nomorDoBaru">Nomor DO</label>
+          <input id="nomorDoBaru" :value="nextDoNumber" readonly />
+        </div>
+        <div class="field">
+          <label for="nim">NIM</label>
+          <input id="nim" v-model.trim="newTracking.nim" placeholder="Contoh: 123456789" />
+          <small class="error" v-if="formErrors.nim">{{ formErrors.nim }}</small>
+        </div>
+        <div class="field">
+          <label for="nama">Nama Mahasiswa</label>
+          <input id="nama" v-model.trim="newTracking.nama" placeholder="Nama lengkap" />
+          <small class="error" v-if="formErrors.nama">{{ formErrors.nama }}</small>
+        </div>
+        <div class="field">
+          <label for="ekspedisi">Ekspedisi</label>
+          <select id="ekspedisi" v-model="newTracking.ekspedisi">
+            <option value="">Pilih Ekspedisi</option>
+            <option v-for="item in pengirimanList" :key="item.kode" :value="item.nama">{{ item.nama }}</option>
+          </select>
+          <small class="error" v-if="formErrors.ekspedisi">{{ formErrors.ekspedisi }}</small>
+        </div>
+        <div class="field">
+          <label for="paket">Paket Bahan Ajar</label>
+          <select id="paket" v-model="newTracking.paket">
+            <option value="">Pilih Paket</option>
+            <option v-for="item in paket" :key="item.kode" :value="item.kode">{{ item.kode }} - {{ item.nama }}</option>
+          </select>
+          <small class="error" v-if="formErrors.paket">{{ formErrors.paket }}</small>
+          <div class="paket-detail" v-if="selectedPaket">
+            <span>Isi Paket:</span>
+            <ul>
+              <li v-for="kode in selectedPaket.isi" :key="kode">{{ kode }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="field">
+          <label for="tanggal">Tanggal Kirim</label>
+          <input id="tanggal" type="date" v-model="newTracking.tanggalKirim" />
+          <small class="error" v-if="formErrors.tanggalKirim">{{ formErrors.tanggalKirim }}</small>
+        </div>
+        <div class="field">
+          <label for="total">Total Harga</label>
+          <input id="total" :value="formatCurrency(selectedPaket ? selectedPaket.harga : 0)" readonly />
+        </div>
+        <div class="field full-width">
+          <button class="btn primary" type="submit">Simpan DO</button>
+          <span class="helper" v-if="formErrors.general">{{ formErrors.general }}</span>
+        </div>
+      </form>
+    </section>
+
+    <form class="search-card" @submit.prevent="searchTracking">
+      <label for="nomorDO">Nomor Delivery Order</label>
+      <div class="search-row">
+        <input type="text" id="nomorDO" v-model.trim="searchQuery" placeholder="Masukkan nomor DO" required>
+        <button type="submit" class="btn primary">Cari</button>
+      </div>
+      <p class="helper">Contoh: DO{{ currentYear }}-001</p>
+      <p class="error">{{ searchError }}</p>
+    </form>
+
+    <section class="result-section" v-if="activeTracking">
+      <div class="result-header">
+        <div>
+          <div class="result-title">Nama Mahasiswa</div>
+          <div class="result-name">{{ activeTracking.nama }}</div>
+        </div>
+        <span class="status-pill" :data-status="activeTracking.status.toLowerCase()">{{ activeTracking.status }}</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Status Pengiriman</span>
+          <span>{{ progressPercent }}%</span>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" :style="{ width: progressPercent + '%' }"></div>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span>Ekspedisi</span>
+          <strong>{{ activeTracking.ekspedisi }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Tanggal Kirim</span>
+          <strong>{{ activeTracking.tanggalKirim }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Jenis Paket</span>
+          <strong>{{ activeTracking.paket }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Total Pembayaran</span>
+          <strong>{{ formatCurrency(activeTracking.total) }}</strong>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <h3>Riwayat Pengiriman</h3>
+        <ul>
+          <li v-for="(item, index) in activeTracking.perjalanan" :key="index">
+            <span>{{ item.waktu }}</span>
+            <p>{{ item.keterangan }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="js/data-vue.js"></script>
+  <script src="js/tracking.js"></script>
+</body>
+
+</html>
