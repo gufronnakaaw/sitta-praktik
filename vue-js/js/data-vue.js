@@ -65,7 +65,6 @@ const dataVue = {
       catatanHTML: "Stok <i>menipis</i>, prioritaskan reorder",
     },
   ],
-  // Simulasi status DO (opsional fitur Tracking DO)
   tracking: {
     "DO2025-0001": {
       nim: "123456789",

@@ -133,7 +133,6 @@ const TrackingPengirimanComponent = {
   data() {
     const today = new Date().toISOString().slice(0, 10);
 
-    // Data awal disesuaikan menggunakan 4 digit agar serasi dengan modifikasi RegExp di bawah
     const trackingRecords = Object.entries({
       "DO2026-0001": {
         nim: "123456789",
@@ -196,7 +195,6 @@ const TrackingPengirimanComponent = {
       );
     },
     nextSequence() {
-      // PERBAIKAN: Mengubah \\d{3} menjadi \\d{4} agar cocok dengan format 4 digit (0001)
       const pattern = new RegExp(`^DO${this.currentYear}-(\\d{4})$`);
       const sequences = this.trackingRecords
         .map((item) => {
@@ -209,7 +207,6 @@ const TrackingPengirimanComponent = {
       return max + 1;
     },
     nextDoNumber() {
-      // PERBAIKAN: Mengubah padStart 3 menjadi 4 digit agar konsisten
       return `DO${this.currentYear}-${String(this.nextSequence).padStart(4, "0")}`;
     },
     progressPercent() {
