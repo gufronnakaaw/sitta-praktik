@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Bahan Ajar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="assets/css/stok.css" id="dynamic-css">
+</head>
+
+<body>
+  <div id="app">
+
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand" @click.prevent="activeTab = 'dashboard'">
+          Dashboard
+        </a>
+      </div>
+
+      <ul class="nav-list">
+        <li>
+          <a href="#" class="nav-link" :class="{ active: activeTab === 'informasi' }"
+            @click.prevent="activeTab = 'informasi'">
+            Informasi Bahan Ajar
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="nav-link" :class="{ active: activeTab === 'tracking' }"
+            @click.prevent="activeTab = 'tracking'">
+            Tracking Pengiriman
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <header class="topbar" v-if="activeTab === 'dashboard'">
+        <div>
+          <div class="greeting">{{ greeting }}</div>
+          <p class="subtitle">
+            Sistem pengelolaan bahan ajar yang rapi, cepat, dan terpantau.
+          </p>
+        </div>
+
+        <div class="profile-chip">
+          <div class="avatar"></div>
+
+          <div>
+            <div class="name">Admin Sitta</div>
+            <div class="role">Operator</div>
+          </div>
+        </div>
+      </header>
+
+      <section v-if="activeTab === 'dashboard'" class="hero-card">
+        <div>
+          <h1>Selamat Datang di Dashboard</h1>
+
+          <p>
+            Pilih menu di samping untuk mulai mengelola informasi,
+            pengiriman, dan laporan bahan ajar.
+          </p>
+
+          <div class="cta-row">
+            <button class="btn primary" @click="activeTab = 'informasi'">
+              Lihat Informasi
+            </button>
+
+            <button class="btn ghost" @click="activeTab = 'tracking'">
+              Cek Tracking
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-graphic">
+          <div class="circle one"></div>
+          <div class="circle two"></div>
+          <div class="circle three"></div>
+        </div>
+      </section>
+
+      <stok-table v-if="activeTab === 'informasi'"></stok-table>
+
+      <tracking-pengiriman v-if="activeTab === 'tracking'"></tracking-pengiriman>
+    </main>
+
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="assets/js/components/stok-table.js"></script>
+  <script src="assets/js/components/tracking-pengiriman.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>
